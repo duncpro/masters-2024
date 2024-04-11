@@ -8,7 +8,7 @@ export type MastersPlayer = {
 }
 
 export async function fetchMastersPlayers(abort?: AbortSignal): Promise<Array<MastersPlayer>> {
-  const response = await fetch(MASTERS_COM_URL, { signal: abort  });
+  const response = await fetch(MASTERS_COM_URL, { signal: abort, headers: { 'cache-control': 'no-cache' } });
   const body: any = (await response.json()).data;
 
   const players: Array<MastersPlayer> = [];
