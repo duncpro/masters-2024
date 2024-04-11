@@ -15,7 +15,7 @@ export type Roster = {
 
 export async function fetchRosters(abort?: AbortSignal): Promise<Array<Roster>> {
   const rosters: Array<Roster> = [];
-  const response = await fetch('rosters.csv', { signal: abort, headers: { 'cache-control': 'no-cache'  } });
+  const response = await fetch('rosters.csv', { signal: abort, cache: 'no-cache' });
   const body = await response.text();
 
   let rowid = 1;
