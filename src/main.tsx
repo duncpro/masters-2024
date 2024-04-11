@@ -2,9 +2,10 @@ import { createRoot } from 'react-dom/client';
 import * as React from 'react';
 
 import { fetchMastersPlayers } from './masterscom';
-import { Roster, fetchRosters } from './rosters';
+import { fetchRosters } from './rosters';
 import { linkRosters } from './linkroster';
 import { RankedRoster, mkleaderboard } from './scoreroster';
+import { usePoll } from './util';
 
 type RemoteState = { leaderboard: Array<RankedRoster> }
 
@@ -14,37 +15,26 @@ async function fetchRemoteState(abort: AbortSignal): Promise<RemoteState> {
   return { leaderboard: mkleaderboard(linkedrosters) };
 }
 
+function ErrorReport(props: { error: Error }) {
+  return (
+    <div style={{backgroundColor: 'palevioletred', border: '1px solid red', borderRadius: '2px'}}>
+      <h1>Error</h1>
+      <pre>{props.error.message}</pre>
+      <pre>
+        {props.error.stack}
+      </pre>
+    </div>
+  )
+}
+
 function StateRoot() {
-  const [rstate, setState] = React.useState<RemoteState>(null);
-  const [error, setError] = React.useState<Error>(null);
-    
-  React.useEffect(() => {
-    const abort = new AbortController();
-    fetchRemoteState(abort.signal)
-      .then(setState)
-      .catch((error) => { console.error(error); setError(error); })
-    return () => abort.abort();
-  }, []);
-
-  if (error !== null) {
-    return (
-      <>
-        <h1>Error</h1>
-        <pre>{error.message}</pre>
-        <pre>
-          {error.stack}
-        </pre>
-      </>
-    )
-  }
-
-  if (rstate !== null) {
-    return <NavRoot {...{rstate}}/>
-  }
+  const [rstate, error] = usePoll(null, 5000, 
+    async (signal) => fetchRemoteState(signal));
 
   return (
     <>
-      <h1>Loading...</h1>
+      { error !== null ? <ErrorReport {...{error}} /> : null }
+      { rstate === null ? <p>Loading...</p> : <NavRoot {...{rstate}} /> }
     </>
   )
 }
@@ -113,7 +103,7 @@ function TeamDetails(props: { roster: RankedRoster, gohome: Function  }) {
           </tr>
         </thead>
         <tbody>
-          {props.roster.players.toSorted((a, b) => a.mplayer.prs - b.mplayer.prs).map((player) => 
+          {props.roster.players.map((player) => 
             <tr key={player.mplayer.name} style={{color: props.roster.bestplayers.includes(player) ? 'green' : 'red'}}>
               <td>{player.mplayer.name}</td>
               <td>{player.mplayer.prs}</td>

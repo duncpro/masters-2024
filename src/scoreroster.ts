@@ -3,16 +3,16 @@ import { LinkedRoster, LinkedPlayer } from './linkroster';
 export type ScoredRoster = LinkedRoster & { bestplayers: Array<LinkedPlayer>, score: number  }
 
 export function scoreroster(roster: LinkedRoster): ScoredRoster {
-  const splayers = roster.players.toSorted((a, b) => a.mplayer.prs - b.mplayer.prs);
+  const players = roster.players.toSorted((a, b) => a.mplayer.prs - b.mplayer.prs);
   
   let score = 0;
   const bestplayers: Array<LinkedPlayer> = [];
   for (let i = 0; i < 5; i++) {
-    score += splayers[i].mplayer.prs;
-    bestplayers.push(splayers[i]);
+    score += players[i].mplayer.prs;
+    bestplayers.push(players[i]);
   }
 
-  return { ...roster, score, bestplayers };
+  return { ...roster, score, bestplayers, players };
 }
 
 export type RankedRoster = ScoredRoster & { rank: number };
