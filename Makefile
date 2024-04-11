@@ -1,4 +1,4 @@
-dist.zip: build/index.html build/bundle.js build/rosters.csv
+dist.zip: build/index.html build/bundle.js build/rosters.csv build/main.css
 	zip -r dist.zip build/
 
 build/bundle.js: src/main.tsx src/linkroster.ts src/masterscom.ts src/rosters.ts src/scoreroster.ts src/util.ts
@@ -12,16 +12,18 @@ build/rosters.csv: src/rosters.csv
 	mkdir -p build/
 	cp src/rosters.csv build/rosters.csv
 
+build/main.css: src/main.css
+	mkdir -p build/
+	cp src/main.css build/main.css
+
 .PHONY: watch serve clean
 
 watch:
-	watchexec -w src make build/bundle.js build/index.html build/rosters.csv
+	watchexec -w src make build/bundle.js build/index.html build/rosters.csv build/main.css
 
 serve:
 	npx http-server build/
 
 clean:
-	rm -f build/index.html
-	rm -f build/bundle.js
-	rm -f build/rosters.csv
+	rm -rf build/ 
 	rm -f dist.zip

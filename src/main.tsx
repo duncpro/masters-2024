@@ -64,7 +64,7 @@ function LeaderboardEntry(props: { roster: RankedRoster, onClick: () => void }) 
 
 function Leaderboard(props: { rstate: RemoteState, select: (arg0: RankedRoster) => void }) {
   return (
-    <>
+    <div style={{overflowY: 'auto', flex: '1'}}>
       <h1>Leaderboard</h1>
       <p>Standings as of {new Date(props.rstate.timestamp).toString()}</p>
       <table>
@@ -82,7 +82,8 @@ function Leaderboard(props: { rstate: RemoteState, select: (arg0: RankedRoster) 
           )}
         </tbody>
       </table>
-    </>
+      <div style={{height: '100px'}}></div>
+    </div>
   )
 }
 
