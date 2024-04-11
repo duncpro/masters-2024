@@ -7,12 +7,13 @@ import { linkRosters } from './linkroster';
 import { RankedRoster, mkleaderboard } from './scoreroster';
 import { usePoll } from './util';
 
-type RemoteState = { leaderboard: Array<RankedRoster> }
+type RemoteState = { leaderboard: Array<RankedRoster>, timestamp: number }
 
 async function fetchRemoteState(abort: AbortSignal): Promise<RemoteState> {
   const [mplayers, rosters] = await Promise.all([fetchMastersPlayers(abort), fetchRosters(abort)]);
   const linkedrosters = linkRosters(rosters, mplayers);
-  return { leaderboard: mkleaderboard(linkedrosters) };
+  const timestamp = Date.now();
+  return { leaderboard: mkleaderboard(linkedrosters), timestamp };
 }
 
 function ErrorReport(props: { error: Error }) {
@@ -44,7 +45,8 @@ function NavRoot(props: {rstate: RemoteState}) {
   if (roster === null) {
     return <Leaderboard rstate={props.rstate} select={setSelectedRoster} />
   } else {
-    return <TeamDetails {...{roster}} gohome={() => setSelectedRoster(null)}/>
+    return <TeamDetails {...{roster}} gohome={() => setSelectedRoster(null)}
+      timestamp={props.rstate.timestamp} />
   }
 }
 
@@ -64,6 +66,7 @@ function Leaderboard(props: { rstate: RemoteState, select: (arg0: RankedRoster) 
   return (
     <>
       <h1>Leaderboard</h1>
+      <p>Standings as of {new Date(props.rstate.timestamp).toString()}</p>
       <table>
         <thead>
           <tr>
@@ -85,10 +88,11 @@ function Leaderboard(props: { rstate: RemoteState, select: (arg0: RankedRoster) 
 
 
 
-function TeamDetails(props: { roster: RankedRoster, gohome: Function  }) {
+function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp: number  }) {
   return (
     <>
       <h1>{props.roster.teamname}</h1>
+      <p>Player scores as of {new Date(props.timestamp).toString()}</p>
       <div>
         <button onClick={() => props.gohome()}>
           Back to Home
