@@ -10,7 +10,8 @@ export type RosterPlayer = {
 export type Roster = {
   teamname: string,
   players: Array<RosterPlayer>,
-  rowid: number
+  rowid: number,
+  caption: string
 }
 
 export async function fetchRosters(abort?: AbortSignal): Promise<Array<Roster>> {
@@ -25,7 +26,8 @@ export async function fetchRosters(abort?: AbortSignal): Promise<Array<Roster>> 
     for (let i = 1; i < 9; i += 1) {
       players.push({ rpname: entry[i] })
     }
-    rosters.push({ teamname, players, rowid });
+    const caption = entry[11];
+    rosters.push({ teamname, players, rowid, caption });
     rowid += 1;
   }
   return rosters;

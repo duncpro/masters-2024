@@ -53,9 +53,12 @@ function NavRoot(props: {rstate: RemoteState}) {
 function LeaderboardEntry(props: { roster: RankedRoster, onClick: () => void }) {
   return (
     <>
-      <tr onClick={props.onClick} style={{cursor: 'pointer'}}>
+      <tr onClick={props.onClick} style={{cursor: 'pointer', height: '166px'}}>
           <td>{props.roster.rank}</td>
-          <td>{props.roster.teamname}</td>
+          <td>
+            <div>{props.roster.teamname}</div>
+            <div style={{fontSize: '20px'}}>{props.roster.csvroster.caption}</div>
+          </td>
           <td>{props.roster.score}</td>
       </tr>
     </>
@@ -90,6 +93,7 @@ function Leaderboard(props: { rstate: RemoteState, select: (arg0: RankedRoster) 
 
 
 function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp: number  }) {
+  React.useEffect(() => window.scrollTo(0, 0), []);
   return (
     <>
       <h1>{props.roster.teamname}</h1>
