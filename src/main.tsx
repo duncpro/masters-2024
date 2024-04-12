@@ -29,7 +29,7 @@ function ErrorReport(props: { error: Error }) {
 }
 
 function StateRoot() {
-  const [rstate, error] = usePoll(null, 5000, 
+  const [rstate, error] = usePoll(null, 30 * 1000, 
     async (signal) => fetchRemoteState(signal));
 
   return (
