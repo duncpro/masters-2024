@@ -105,6 +105,7 @@ function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp:
           Back to Home
         </button>
       </div>
+      <h2>Roster</h2>
       <table>
         <thead>
           <tr>

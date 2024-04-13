@@ -3,7 +3,8 @@ import { LinkedRoster, LinkedPlayer } from './linkroster';
 export type ScoredRoster = LinkedRoster & { bestplayers: Array<LinkedPlayer>, score: number, penalty: number  }
 
 export function scoreroster(roster: LinkedRoster): ScoredRoster {
-  const players = roster.players.toSorted((a, b) => a.mplayer.prs - b.mplayer.prs);
+  const players = roster.players.toSorted(
+    (a, b) => (2 * a.mplayer.prs + (a.mplayer.eliminated ? 1 : 0)) - (2 * b.mplayer.prs + (b.mplayer.eliminated ? 1 : 0)));
   
   let score = 0;
   let penalty = 0;
