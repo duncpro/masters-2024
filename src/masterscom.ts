@@ -2,8 +2,9 @@ const YEAR = 2024;
 const MASTERS_COM_URL = `https://www.masters.com/en_US/scores/feeds/${YEAR}/scores.json`;
 
 export type MastersPlayer = {
+  eliminated: boolean,
   name: string,
-  prs: number | null,  // par-relative score (null if players score is unknown)
+  prs: number,  // par-relative score (null if players score is unknown)
   hrem: number // the total number of holes this person has yet to play in the tournament
 }
 
@@ -17,13 +18,15 @@ export async function fetchMastersPlayers(abort?: AbortSignal): Promise<Array<Ma
     
     const UNKNOWN_SCORE_INDICATORS = ['E', null, undefined, ''];
     const isUnknownScore = UNKNOWN_SCORE_INDICATORS.includes(rawpd.topar);
-    const prs = isUnknownScore ? null : parseInt(rawpd.topar);
+    const prs = isUnknownScore ? 0 : parseInt(rawpd.topar);
     const hrem = [...rawpd.round1.scores, ...rawpd.round2.scores, ...rawpd.round3.scores,
       ...rawpd.round4.scores]
       .filter(v => v === null)
       .length;
 
-    players.push({ name, prs, hrem });
+    const eliminated = !rawpd.pos;
+
+    players.push({ name, prs, hrem, eliminated });
   }
   return players;
 }

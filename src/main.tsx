@@ -96,7 +96,7 @@ function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp:
   React.useEffect(() => window.scrollTo(0, 0), []);
   return (
     <>
-      <h1>{props.roster.teamname}</h1>
+      <h1>#{props.roster.rank} {props.roster.teamname}</h1>
       <p>Player scores as of {new Date(props.timestamp).toString()}</p>
       <div>
         <button onClick={() => props.gohome()}>
@@ -109,16 +109,39 @@ function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp:
             <td>Player</td>
             <td>Par</td>
             <td>Top 5</td>
-          </tr>
+           </tr>
         </thead>
         <tbody>
           {props.roster.players.map((player) => 
-            <tr key={player.mplayer.name} style={{color: props.roster.bestplayers.includes(player) ? 'green' : 'red'}}>
-              <td>{player.mplayer.name}</td>
+            <tr key={player.mplayer.name} style={{color: player.mplayer.eliminated ? 'red' : 'inherit'}}>
+              <td style={{textDecoration: player.mplayer.eliminated ? 'line-through' : 'none'}}>{player.mplayer.name}</td>
               <td>{player.mplayer.prs}</td>
               <td>{props.roster.bestplayers.includes(player) ? 'T' : 'F'}</td>
             </tr>  
           )}
+        </tbody>
+      </table>
+      <h2>Score</h2>
+      <table>
+        <thead>
+          <tr>
+            <td>Category</td>
+            <td>Value</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Top 5 Players</td>
+            <td>{props.roster.score - props.roster.penalty}</td>
+          </tr>
+          <tr>
+            <td>Cut Penalty</td>
+            <td>{props.roster.penalty}</td>
+          </tr>
+          <tr>
+            <td>Total</td>
+            <td>{props.roster.score}</td>
+          </tr>
         </tbody>
       </table>
     </>
