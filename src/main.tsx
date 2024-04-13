@@ -111,6 +111,8 @@ function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp:
           <tr>
             <td>Player</td>
             <td>Par</td>
+            <td>Penalty</td>
+            <td>T. Score</td>
             <td>Holes Rem</td>
             </tr>
         </thead>
@@ -120,6 +122,8 @@ function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp:
               backgroundColor: props.roster.bestplayers.includes(player) ? 'lightblue' : undefined}}>
               <td style={{textDecoration: player.mplayer.eliminated ? 'line-through' : 'none'}}>{player.mplayer.name}</td>
               <td>{player.mplayer.prs}</td>
+              <td>{`${props.roster.penalties.get(player) || 0}`}</td>
+              <td>{`${(props.roster.penalties.get(player) || 0) + player.mplayer.prs}`}</td>
               <td>{`${player.mplayer.hrem}`}</td>
             </tr>  
           )}
@@ -136,11 +140,7 @@ function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp:
         <tbody>
           <tr>
             <td>Top 5 Players</td>
-            <td>{props.roster.score - props.roster.penalty}</td>
-          </tr>
-          <tr>
-            <td>Cut Penalty</td>
-            <td>{props.roster.penalty}</td>
+            <td>{props.roster.score}</td>
           </tr>
           <tr>
             <td>Total</td>
