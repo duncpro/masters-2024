@@ -19,12 +19,13 @@ export async function fetchMastersPlayers(abort?: AbortSignal): Promise<Array<Ma
     const UNKNOWN_SCORE_INDICATORS = ['E', null, undefined, ''];
     const isUnknownScore = UNKNOWN_SCORE_INDICATORS.includes(rawpd.topar);
     const prs = isUnknownScore ? 0 : parseInt(rawpd.topar);
-    const hrem = [...rawpd.round1.scores, ...rawpd.round2.scores, ...rawpd.round3.scores,
+    let hrem = [...rawpd.round1.scores, ...rawpd.round2.scores, ...rawpd.round3.scores,
       ...rawpd.round4.scores]
       .filter(v => v === null)
       .length;
 
     const eliminated = !rawpd.pos;
+    if (eliminated) hrem = 0;
 
     players.push({ name, prs, hrem, eliminated });
   }

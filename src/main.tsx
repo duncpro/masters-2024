@@ -54,12 +54,13 @@ function LeaderboardEntry(props: { roster: RankedRoster, onClick: () => void }) 
   return (
     <>
       <tr onClick={props.onClick} style={{cursor: 'pointer', height: '166px'}}>
-          <td>{props.roster.rank}</td>
-          <td>
-            <div>{props.roster.teamname}</div>
-            <div style={{fontSize: '20px'}}>{props.roster.csvroster.caption}</div>
-          </td>
-          <td>{props.roster.score}</td>
+        <td>{props.roster.rank}</td>
+        <td>
+          <div>{props.roster.teamname}</div>
+          <div style={{fontSize: '20px'}}>{props.roster.csvroster.caption}</div>
+        </td>
+        <td>{props.roster.score}</td>
+        <td>{props.roster.totalhrem}</td>
       </tr>
     </>
   )
@@ -76,6 +77,7 @@ function Leaderboard(props: { rstate: RemoteState, select: (arg0: RankedRoster) 
             <td>Rank</td>
             <td>Team</td>
             <td>Par</td>
+            <td>Rem</td>
           </tr>
         </thead>
         <tbody>
@@ -108,20 +110,21 @@ function TeamDetails(props: { roster: RankedRoster, gohome: Function, timestamp:
           <tr>
             <td>Player</td>
             <td>Par</td>
-            <td>Top 5</td>
-           </tr>
+            <td>Holes Rem</td>
+            </tr>
         </thead>
         <tbody>
           {props.roster.players.map((player) => 
-            <tr key={player.mplayer.name} style={{color: player.mplayer.eliminated ? 'red' : 'inherit'}}>
+            <tr key={player.mplayer.name} style={{color: player.mplayer.eliminated ? 'red' : 'inherit',
+              backgroundColor: props.roster.bestplayers.includes(player) ? 'lightblue' : undefined}}>
               <td style={{textDecoration: player.mplayer.eliminated ? 'line-through' : 'none'}}>{player.mplayer.name}</td>
               <td>{player.mplayer.prs}</td>
-              <td>{props.roster.bestplayers.includes(player) ? 'T' : 'F'}</td>
+              <td>{`${player.mplayer.hrem}`}</td>
             </tr>  
           )}
         </tbody>
       </table>
-      <h2>Score</h2>
+      <h2>League Score</h2>
       <table>
         <thead>
           <tr>
