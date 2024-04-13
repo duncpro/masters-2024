@@ -76,7 +76,7 @@ function Leaderboard(props: { rstate: RemoteState, select: (arg0: RankedRoster) 
           <tr>
             <td>Rank</td>
             <td>Team</td>
-            <td>Par</td>
+            <td>Score</td>
             <td>Rem</td>
           </tr>
         </thead>
